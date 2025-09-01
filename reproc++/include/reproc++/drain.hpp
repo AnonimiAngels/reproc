@@ -52,7 +52,7 @@ std::error_code drain(process &process, Out &&out, Err &&err)
       break;
     }
 
-    stream stream = events & event::out ? stream::out : stream::err;
+    reproc::stream stream = events & event::out ? reproc::stream::out : reproc::stream::err;
 
     size_t bytes_read = 0;
     std::tie(bytes_read, ec) = process.read(stream, buffer, BUFFER_SIZE);
@@ -64,7 +64,7 @@ std::error_code drain(process &process, Out &&out, Err &&err)
 
     // This used to be `auto &sink = stream == stream::out ? out : err;` but
     // that doesn't actually work if `out` and `err` are not the same type.
-    if (stream == stream::out) {
+    if (stream == reproc::stream::out) {
       ec = out(stream, buffer, bytes_read);
     } else {
       ec = err(stream, buffer, bytes_read);
